@@ -227,7 +227,7 @@ class TunerGUI:
     def __init__(self, root):
         self.root = root
         self.root.title("🎸 Afinador de Ukelele FFT+HPS")
-        self.root.geometry("600x900")
+        self.root.geometry("1000x600")
         self.root.resizable(False, False)
         self.root.configure(bg="#667eea")
         
@@ -246,6 +246,7 @@ class TunerGUI:
         self.log_text.config(state=tk.DISABLED)
         
     def create_widgets(self):
+        
         main_frame = tk.Frame(self.root, bg="#667eea")
         main_frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
         
@@ -259,8 +260,14 @@ class TunerGUI:
                            bg="#667eea", fg="white")
         subtitle.pack(pady=(0, 20))
         
-        display_frame = tk.Frame(main_frame, bg="white", relief=tk.RAISED, bd=3)
-        display_frame.pack(fill=tk.BOTH, expand=True, pady=10)
+        content_frame = tk.Frame(main_frame, bg="#667eea")
+        content_frame.pack(fill=tk.BOTH, expand=True)
+        
+        left_frame = tk.Frame(content_frame, bg="#667eea")
+        left_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(0, 10))
+        
+        display_frame = tk.Frame(left_frame, bg="white", relief=tk.RAISED, bd=3)
+        display_frame.pack(fill=tk.BOTH, expand=True)
         
         self.string_label = tk.Label(display_frame, text="---", 
                                      font=("Helvetica", 80, "bold"), 
@@ -298,7 +305,7 @@ class TunerGUI:
                                      padx=20, pady=10, relief=tk.RAISED)
         self.status_label.pack(pady=20)
         
-        ref_frame = tk.Frame(main_frame, bg="#667eea")
+        ref_frame = tk.Frame(left_frame, bg="#667eea")
         ref_frame.pack(pady=10)
         
         tk.Label(ref_frame, text="Cuerdas del Ukelele:", 
@@ -310,25 +317,32 @@ class TunerGUI:
                 font=("Helvetica", 10), 
                 bg="#667eea", fg="white").pack()
         
-        self.control_button = tk.Button(main_frame, text="▶ INICIAR", 
+        right_frame = tk.Frame(content_frame, bg="#667eea")
+        right_frame.pack(side=tk.RIGHT, fill=tk.BOTH, padx=(10, 0))
+        
+        control_frame = tk.Frame(right_frame, bg="#667eea")
+        control_frame.pack(pady=(0, 20))
+        
+        self.control_button = tk.Button(control_frame, text="▶ INICIAR", 
                                        command=self.toggle_tuner,
                                        font=("Helvetica", 16, "bold"),
                                        bg="#51cf66", fg="white",
                                        activebackground="#40c057",
                                        relief=tk.RAISED, bd=3,
                                        padx=40, pady=15,
-                                       cursor="hand2")
-        self.control_button.pack(pady=20)
+                                       cursor="hand2",
+                                       width=12)
+        self.control_button.pack()
         
-        log_frame = tk.Frame(main_frame, bg="white", relief=tk.RAISED, bd=2)
-        log_frame.pack(fill=tk.BOTH, expand=True, pady=10)
+        log_frame = tk.Frame(right_frame, bg="white", relief=tk.RAISED, bd=2)
+        log_frame.pack(fill=tk.BOTH, expand=True)
         
-        tk.Label(log_frame, text="📋 Registro de Eventos", 
+        tk.Label(log_frame, text="📋 Registro", 
                 font=("Helvetica", 12, "bold"), 
                 bg="white", fg="#333").pack(pady=5)
         
         self.log_text = scrolledtext.ScrolledText(log_frame, 
-                                                  height=8,
+                                                  width=35,
                                                   font=("Courier", 9),
                                                   bg="#f9f9f9",
                                                   fg="#333",
@@ -337,7 +351,7 @@ class TunerGUI:
         self.log_text.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
         
     def draw_meter(self):
-        self.meter_canvas.delete("all")
+        self.meter_canvas.delete("all")#
         width = self.meter_canvas.winfo_width()
         height = self.meter_canvas.winfo_height()
         
